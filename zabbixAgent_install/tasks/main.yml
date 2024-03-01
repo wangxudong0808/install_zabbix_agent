@@ -1,0 +1,24 @@
+---
+# tasks file for zabbixAgent_install
+
+        - name: install zabbix_yum_install
+          copy:
+                src: /etc/yum.repos.d
+                dest: /etc
+
+        - name: install zabbix_agent
+          yum:
+                name: zabbix-agent
+                state: present
+
+        - name: copy zabbix_agentd.conf
+          template:
+                src: zabbix_agentd.conf.j2
+                dest: /etc/zabbix/zabbix_agentd.conf
+          notify: restart zabbix
+
+        - name: start zabbix-agent
+          service:
+                name: zabbix-agent
+                state: started
+                enabled: yes
